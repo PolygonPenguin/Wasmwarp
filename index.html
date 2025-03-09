@@ -15,7 +15,7 @@
       async function fetchProjectData() {
         try {
           // Get project metadata to retrieve the project token
-          const metadataResponse = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`);
+          const metadataResponse = await fetch(`https://corsproxy.io/https://api.scratch.mit.edu/projects/${projectId}`);
           if (!metadataResponse.ok) {
             console.error(`Error retrieving project info: ${metadataResponse.status}`);
             return;
