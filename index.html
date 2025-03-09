@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fetch Scratch Project Data</title>
+</head>
+<body>
+  <script>
+    // Get the project ID from the URL hash (e.g., url.com/#projectid)
+    const projectId = window.location.hash ? window.location.hash.substring(1) : null;
+
+    if (!projectId) {
+      console.error("No project ID provided in URL hash.");
+    } else {
+      async function fetchProjectData() {
+        try {
+          // Get project metadata to retrieve the project token
+          const metadataResponse = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`);
+          if (!metadataResponse.ok) {
+            console.error(`Error retrieving project info: ${metadataResponse.status}`);
+            return;
+          }
+          const projectInfo = await metadataResponse.json();
+          const projectToken = projectInfo.project_token;
+          if (!projectToken) {
+            console.error("Project token not found in the response.");
+            return;
+          }
+
+          // Use the token to fetch the project data as JSON
+          const dataResponse = await fetch(`https://projects.scratch.mit.edu/${projectId}/?token=${projectToken}`);
+          if (!dataResponse.ok) {
+            console.error(`Error downloading project: ${dataResponse.status}`);
+            return;
+          }
+          const projectData = await dataResponse.json();
+          console.log("Project Data:", projectData);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      fetchProjectData();
+    }
+  </script>
+</body>
+</html>
